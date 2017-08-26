@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Key Defs</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h3>Key defs</h3>
+
+  <p *ngIf="keyDefs">
+    Here are some keyDefs
+  </p>
+  <p *ngIf="!keyDefs">
+    Press the buttons to load some key defs!
+  </p>
+
+  <ul>
+    <li *ngFor="let keyDef of keyDefs">
+      {{keyDef.label}} ({{keyDef.name}})
+    </li>
+  </ul>
+
+  <button ion-button secondary (click)="login()">Login</button>
+  <button ion-button secondary (click)="loadKeyDefs()">Load keydefs</button>
+  <button ion-button secondary (click)="logout()">Logout</button>
+</ion-content>

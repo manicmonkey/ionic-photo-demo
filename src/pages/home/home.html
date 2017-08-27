@@ -8,11 +8,14 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+  <h3>Welcome back to your bank!</h3>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <p>You can get to other screens using the menu to the left</p>
+
+  <img *ngIf="image" [src]="image" height="100px" />
+
+  <p>Your current balance is £1200</p>
 
   <button ion-button secondary menuToggle>Toggle Menu</button>
+
 </ion-content>

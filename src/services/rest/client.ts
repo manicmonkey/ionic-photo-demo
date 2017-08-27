@@ -70,4 +70,12 @@ export class Client {
     console.log('Logging out');
     this.httpClient.delete('/rest/v1/sessions').subscribe()
   }
+
+  loadDocumentByCuk(customerUniqueKey: string, callback: (url: string) => void) {
+    this.httpClient.get('/rest/v1/documents/by-cuk/' + customerUniqueKey).subscribe(data => {
+      const id = data[0]['properties']['id'];
+      const rev = data[0]['properties']['revision'];
+      callback('/rest/v1/documents/by-id/' + id + '/' + rev + '/file')
+    });
+  }
 }

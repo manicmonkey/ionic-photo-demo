@@ -52,12 +52,12 @@ export class Client {
     this.httpClient.post('/rest/v1/sessions', creds).subscribe();
   }
 
-  createDocument(document: Document, file?: [string, Blob]) {
+  createDocument(document: Document, file?: {extension: string, data: Blob}) {
     const form = new FormData();
     form.append('document', new Blob([JSON.stringify(document)], { type: 'application/json' }));
     //todo check value provided
-    form.set('extension', file[0]);
-    form.set('file', file[1]);
+    form.set('extension', file.extension);
+    form.set('file', file.data);
     this.httpClient.post('/rest/v1/documents', form).subscribe();
   }
 

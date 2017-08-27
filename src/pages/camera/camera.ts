@@ -42,14 +42,14 @@ export class CameraPage {
   upload() {
     console.log("Uploading with customer number: " + this.customerNumber);
 
-    var data = BlobBuilder.dataURItoBlob(this.imageData);
-    var doc: Document = {
+    const data = BlobBuilder.dataURItoBlob(this.imageData);
+    const doc: Document = {
       documentDef: 'photo',
       keys: {
         'customer-number': this.customerNumber
       },
       customerUniqueKey: 'photo-' + this.customerNumber
     };
-    this.client.createDocument(doc, ['jpg', data]);
+    this.client.createDocument(doc, { extension: 'jpg', data: data });
   }
 }

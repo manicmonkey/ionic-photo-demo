@@ -8,6 +8,36 @@ export interface KeyDef {
   // some more...
 }
 
+export interface Document {
+  documentDef: string,
+  keys: object,
+  customerUniqueKey?: string,
+}
+
+export class BlobBuilder {
+  static dataURItoBlob(dataURI: string): Blob {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    // http://stackoverflow.com/a/5100158/907388
+    // inspired this pollyfill: https://github.com/blueimp/JavaScript-Canvas-to-Blob
+    let byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0){
+      byteString = atob(dataURI.split(',')[1]);
+    } else{
+      byteString = decodeURI(dataURI.split(',')[1]);
+    }
+    // separate out the mime component
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    const ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
+  }
+}
+
 @Injectable()
 export class Client {
   constructor(public httpClient: HttpClient) {
@@ -22,32 +52,14 @@ export class Client {
     this.httpClient.post('/rest/v1/sessions', creds).subscribe();
   }
 
-  createDocument(data: string) {
-    var doc = {
-      keys: {},
-      documentDef: 'photo'
-    };
+  createDocument(document: Document, file?: [string, Blob]) {
     const form = new FormData();
-    form.append('document', new Blob([JSON.stringify(doc)], { type: 'application/json' }));
-    // form.set('document', 'photo');
-    form.set('extension', 'jpg');
-    form.set('file', this.getData(data));
-    // form.set('file', new Blob([data], { type: 'image/jpeg' }));
+    form.append('document', new Blob([JSON.stringify(document)], { type: 'application/json' }));
+    //todo check value provided
+    form.set('extension', file[0]);
+    form.set('file', file[1]);
     this.httpClient.post('/rest/v1/documents', form).subscribe();
   }
-
-  private getData(data: string) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString = atob(data);
-
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia], {type: 'image/jpeg'});
-  };
 
   loadKeyDefs() {
     console.log('Retrieving key defs');

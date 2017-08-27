@@ -43,11 +43,11 @@ export class Client {
   constructor(public httpClient: HttpClient) {
   }
 
-  login() {
+  login(username: string, password: string) {
     console.log('Logging in');
     const creds = {
-      'username': 'admin',
-      'password': 'password'
+      'username': username,
+      'password': password
     };
     this.httpClient.post('/rest/v1/sessions', creds).subscribe();
   }

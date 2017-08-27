@@ -16,14 +16,18 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 
 import {HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import {XsrfInterceptor} from "../services/rest/xsrf-interceptor";
+import {LoginPage} from "../pages/login/login";
+import {LogoutPage} from "../pages/logout/logout";
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ListPage,
     CameraPage,
-    KeyDefsPage
+    HomePage,
+    KeyDefsPage,
+    ListPage,
+    LoginPage,
+    LogoutPage,
   ],
   imports: [
     BrowserModule,
@@ -37,10 +41,12 @@ import {XsrfInterceptor} from "../services/rest/xsrf-interceptor";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ListPage,
     CameraPage,
+    HomePage,
     KeyDefsPage,
+    ListPage,
+    LoginPage,
+    LogoutPage,
   ],
   providers: [
     Camera,

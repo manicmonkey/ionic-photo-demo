@@ -15,7 +15,7 @@ export class KeyDefsPage {
   keyDefs: KeyDef[];
 
   login() {
-    this.client.login();
+    this.client.login('admin', 'password');
   }
 
   loadKeyDefs() {

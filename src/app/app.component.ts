@@ -7,6 +7,8 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { CameraPage } from '../pages/camera/camera';
 import { KeyDefsPage } from '../pages/keydefs/keydefs'
+import { LoginPage } from "../pages/login/login";
+import {LogoutPage} from "../pages/logout/logout";
 
 @Component({
   templateUrl: 'app.html'
@@ -14,7 +16,7 @@ import { KeyDefsPage } from '../pages/keydefs/keydefs'
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -26,7 +28,8 @@ export class MyApp {
       { title: 'Home', component: HomePage },
       { title: 'List', component: ListPage },
       { title: 'Key Defs', component: KeyDefsPage },
-      { title: 'Camera', component: CameraPage }
+      { title: 'Camera', component: CameraPage },
+      { title: 'Logout', component: LogoutPage },
     ];
 
   }

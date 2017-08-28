@@ -43,13 +43,21 @@ export class Client {
   constructor(public httpClient: HttpClient) {
   }
 
+  private baseUrl = 'http://192.168.1.2';
+
+  private errorHandler = (err) => {
+    console.error('Error happened!', err)
+  };
+
+  private options = { withCredentials: true };
+
   login(username: string, password: string) {
     console.log('Logging in');
     const creds = {
       'username': username,
       'password': password
     };
-    this.httpClient.post('/rest/v1/sessions', creds).subscribe();
+    this.httpClient.post(this.baseUrl + '/rest/v1/sessions', creds, this.options).subscribe();
   }
 
   createDocument(document: Document, file?: {extension: string, data: Blob}) {
@@ -58,24 +66,20 @@ export class Client {
     //todo check value provided
     form.set('extension', file.extension);
     form.set('file', file.data);
-    this.httpClient.post('/rest/v1/documents', form).subscribe();
+    this.httpClient.post(this.baseUrl + '/rest/v1/documents', form, this.options).subscribe(() => {}, this.errorHandler);
   }
 
   loadKeyDefs() {
     console.log('Retrieving key defs');
-    return this.httpClient.get<KeyDef[]>('/rest/v1/key-defs');
+    return this.httpClient.get<KeyDef[]>(this.baseUrl + '/rest/v1/key-defs', this.options);
   }
 
   logout() {
     console.log('Logging out');
-    this.httpClient.delete('/rest/v1/sessions').subscribe()
+    this.httpClient.delete(this.baseUrl + '/rest/v1/sessions', this.options).subscribe()
   }
 
-  loadDocumentByCuk(customerUniqueKey: string, callback: (url: string) => void) {
-    this.httpClient.get('/rest/v1/documents/by-cuk/' + customerUniqueKey).subscribe(data => {
-      const id = data[0]['properties']['id'];
-      const rev = data[0]['properties']['revision'];
-      callback('/rest/v1/documents/by-id/' + id + '/' + rev + '/file')
-    });
+  loadDocumentByCuk(customerUniqueKey: string) {
+    return this.httpClient.get(this.baseUrl + '/rest/v1/documents/by-cuk/' + customerUniqueKey, this.options);
   }
 }

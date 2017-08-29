@@ -8,18 +8,13 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>James camera demo</h3>
+  <h3>Your photo</h3>
 
-  <p>
-    When you take a picture it will appear here...
-  </p>
+  <p>You may update your photo using your camera</p>
 
-  <img src="{{imageData}}" height="150px"/>
+  <img src="{{userSession.imageData}}" height="150px"/>
 
-  <ion-item>
-    <ion-label floating>Customer number</ion-label>
-    <ion-input type="text" [(ngModel)]="customerNumber"></ion-input>
-  </ion-item>
+  <p>Your customer number is: {{userSession.customerNumber}}</p>
 
   <button ion-button secondary (click)="takePicture()">Take picture</button>
 

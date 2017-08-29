@@ -57,7 +57,7 @@ export class Client {
       'username': username,
       'password': password
     };
-    this.httpClient.post(this.baseUrl + '/rest/v1/sessions', creds, this.options).subscribe();
+    return this.httpClient.post(this.baseUrl + '/rest/v1/sessions', creds, this.options);
   }
 
   createDocument(document: Document, file?: {extension: string, data: Blob}) {

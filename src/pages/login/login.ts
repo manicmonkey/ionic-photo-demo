@@ -8,7 +8,7 @@ import {UserSession} from "../../app/usersession";
   selector: 'login-page',
   templateUrl: 'login.html'
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   constructor(private client: Client, private navCtrl: NavController, private userSession: UserSession) {
   }
 
@@ -17,12 +17,9 @@ export class LoginPage implements OnInit {
 
   login() {
     console.log('Theoretically logging in as ' + this.username);
-    this.client.login('admin', 'password');
-    this.userSession.customerNumber = this.username;
-    this.navCtrl.setRoot(HomePage);
-  }
-
-  ngOnInit(): void {
-    this.userSession.customerNumber = null;
+    this.client.login('admin', 'password').subscribe(data => {
+      this.userSession.customerNumber = this.username;
+      this.navCtrl.setRoot(HomePage);
+    });
   }
 }

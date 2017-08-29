@@ -57,7 +57,11 @@ export class Client {
       'username': username,
       'password': password
     };
-    return this.httpClient.post(this.userSession.baseUrl + '/rest/v1/sessions', creds, this.options);
+    return this.httpClient.post(this.userSession.baseUrl + '/sessions', creds, this.options);
+  }
+
+  getSession() {
+    return this.httpClient.get(this.userSession.baseUrl + '/sessions?current=true', this.options);
   }
 
   createDocument(document: Document, file?: {extension: string, data: Blob}) {
@@ -67,7 +71,7 @@ export class Client {
       form.set('extension', file.extension);
       form.set('file', file.data);
     }
-    this.httpClient.post(this.userSession.baseUrl + '/rest/v1/documents', form, this.options).subscribe(() => {}, this.errorHandler);
+    this.httpClient.post(this.userSession.baseUrl + '/documents', form, this.options).subscribe(() => {}, this.errorHandler);
   }
 
   updateDocument(document: Document, file?: {extension: string, data: Blob}) {
@@ -77,20 +81,20 @@ export class Client {
       form.set('extension', file.extension);
       form.set('file', file.data);
     }
-    this.httpClient.put(this.userSession.baseUrl + '/rest/v1/documents/by-id/' + document.properties.id, form, this.options).subscribe(() => {}, this.errorHandler);
+    this.httpClient.put(this.userSession.baseUrl + '/documents/by-id/' + document.properties.id, form, this.options).subscribe(() => {}, this.errorHandler);
   }
 
   loadKeyDefs() {
     console.log('Retrieving key defs');
-    return this.httpClient.get<KeyDef[]>(this.userSession.baseUrl + '/rest/v1/key-defs', this.options);
+    return this.httpClient.get<KeyDef[]>(this.userSession.baseUrl + '/key-defs', this.options);
   }
 
   logout() {
     console.log('Logging out');
-    this.httpClient.delete(this.userSession.baseUrl + '/rest/v1/sessions', this.options).subscribe()
+    return this.httpClient.delete(this.userSession.baseUrl + '/sessions', this.options);
   }
 
   loadDocumentByCuk(customerUniqueKey: string) {
-    return this.httpClient.get<Document>(this.userSession.baseUrl + '/rest/v1/documents/by-cuk/' + customerUniqueKey, this.options);
+    return this.httpClient.get<Document>(this.userSession.baseUrl + '/documents/by-cuk/' + customerUniqueKey, this.options);
   }
 }

@@ -4,5 +4,10 @@ export class UserSession {
 
   imageData: string;
 
-  baseUrl: string = 'http://192.168.1.2';
+  baseUrl: string = 'http://192.168.1.2/rest/v1';
+
+  clear() {
+    this.customerNumber = null;
+    this.imageData = null;
+  }
 }

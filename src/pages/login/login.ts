@@ -35,7 +35,10 @@ export class LoginPage implements OnInit {
 
   // clear state when we visit the login page (which we do after a logout)
   ngOnInit(): void {
-    this.userSession.customerNumber = null;
-    this.userSession.imageData = null;
+    this.client.getSession().subscribe(data => {
+      console.log('Got session - must be logged in', data);
+      this.userSession.customerNumber = data[0]['username'];
+      this.navCtrl.setRoot(HomePage);
+    });
   }
 }

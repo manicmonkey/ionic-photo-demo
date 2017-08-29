@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
+import { UserSession } from "../../app/usersession";
 
 export interface KeyDef {
   name: String;
@@ -41,10 +42,8 @@ export class BlobBuilder {
 
 @Injectable()
 export class Client {
-  constructor(public httpClient: HttpClient) {
+  constructor(public httpClient: HttpClient, private userSession: UserSession) {
   }
-
-  private baseUrl = 'http://192.168.1.2';
 
   private errorHandler = (err) => {
     console.error('Error happened!', err)
@@ -58,7 +57,7 @@ export class Client {
       'username': username,
       'password': password
     };
-    return this.httpClient.post(this.baseUrl + '/rest/v1/sessions', creds, this.options);
+    return this.httpClient.post(this.userSession.baseUrl + '/rest/v1/sessions', creds, this.options);
   }
 
   createDocument(document: Document, file?: {extension: string, data: Blob}) {
@@ -68,7 +67,7 @@ export class Client {
       form.set('extension', file.extension);
       form.set('file', file.data);
     }
-    this.httpClient.post(this.baseUrl + '/rest/v1/documents', form, this.options).subscribe(() => {}, this.errorHandler);
+    this.httpClient.post(this.userSession.baseUrl + '/rest/v1/documents', form, this.options).subscribe(() => {}, this.errorHandler);
   }
 
   updateDocument(document: Document, file?: {extension: string, data: Blob}) {
@@ -78,20 +77,20 @@ export class Client {
       form.set('extension', file.extension);
       form.set('file', file.data);
     }
-    this.httpClient.put(this.baseUrl + '/rest/v1/documents/by-id/' + document.properties.id, form, this.options).subscribe(() => {}, this.errorHandler);
+    this.httpClient.put(this.userSession.baseUrl + '/rest/v1/documents/by-id/' + document.properties.id, form, this.options).subscribe(() => {}, this.errorHandler);
   }
 
   loadKeyDefs() {
     console.log('Retrieving key defs');
-    return this.httpClient.get<KeyDef[]>(this.baseUrl + '/rest/v1/key-defs', this.options);
+    return this.httpClient.get<KeyDef[]>(this.userSession.baseUrl + '/rest/v1/key-defs', this.options);
   }
 
   logout() {
     console.log('Logging out');
-    this.httpClient.delete(this.baseUrl + '/rest/v1/sessions', this.options).subscribe()
+    this.httpClient.delete(this.userSession.baseUrl + '/rest/v1/sessions', this.options).subscribe()
   }
 
   loadDocumentByCuk(customerUniqueKey: string) {
-    return this.httpClient.get<Document>(this.baseUrl + '/rest/v1/documents/by-cuk/' + customerUniqueKey, this.options);
+    return this.httpClient.get<Document>(this.userSession.baseUrl + '/rest/v1/documents/by-cuk/' + customerUniqueKey, this.options);
   }
 }

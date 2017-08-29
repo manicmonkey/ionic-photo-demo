@@ -12,6 +12,7 @@ export interface Document {
   documentDef: string,
   keys: object,
   customerUniqueKey?: string,
+  properties?: {id: number}
 }
 
 export class BlobBuilder {
@@ -63,10 +64,21 @@ export class Client {
   createDocument(document: Document, file?: {extension: string, data: Blob}) {
     const form = new FormData();
     form.append('document', new Blob([JSON.stringify(document)], { type: 'application/json' }));
-    //todo check value provided
-    form.set('extension', file.extension);
-    form.set('file', file.data);
+    if (file) {
+      form.set('extension', file.extension);
+      form.set('file', file.data);
+    }
     this.httpClient.post(this.baseUrl + '/rest/v1/documents', form, this.options).subscribe(() => {}, this.errorHandler);
+  }
+
+  updateDocument(document: Document, file?: {extension: string, data: Blob}) {
+    const form = new FormData();
+    form.append('document', new Blob([JSON.stringify(document)], { type: 'application/json' }));
+    if (file) {
+      form.set('extension', file.extension);
+      form.set('file', file.data);
+    }
+    this.httpClient.put(this.baseUrl + '/rest/v1/documents/by-id/' + document.properties.id, form, this.options).subscribe(() => {}, this.errorHandler);
   }
 
   loadKeyDefs() {
@@ -80,6 +92,6 @@ export class Client {
   }
 
   loadDocumentByCuk(customerUniqueKey: string) {
-    return this.httpClient.get(this.baseUrl + '/rest/v1/documents/by-cuk/' + customerUniqueKey, this.options);
+    return this.httpClient.get<Document>(this.baseUrl + '/rest/v1/documents/by-cuk/' + customerUniqueKey, this.options);
   }
 }

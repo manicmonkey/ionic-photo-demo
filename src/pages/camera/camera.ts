@@ -36,14 +36,22 @@ export class CameraPage {
   upload() {
     console.log("Uploading with customer number: " + this.userSession.customerNumber);
 
-    const data = BlobBuilder.dataURItoBlob(this.userSession.imageData);
-    const doc: Document = {
-      documentDef: 'photo',
-      keys: {
-        'customer-number': this.userSession.customerNumber
-      },
-      customerUniqueKey: 'photo-' + this.userSession.customerNumber
-    };
-    this.client.createDocument(doc, { extension: 'jpg', data: data });
+    this.client.loadDocumentByCuk('photo-' + this.userSession.customerNumber).subscribe(data => {
+      console.log('Found document by cuk', data);
+      const doc = data[0];
+      const fileData = BlobBuilder.dataURItoBlob(this.userSession.imageData);
+      this.client.updateDocument(doc, { extension: 'jpg', data: fileData });
+    }, err => {
+      console.log('Could find existing photo (really should check for 404)', err);
+      const data = BlobBuilder.dataURItoBlob(this.userSession.imageData);
+      const doc: Document = {
+        documentDef: 'photo',
+        keys: {
+          'customer-number': this.userSession.customerNumber
+        },
+        customerUniqueKey: 'photo-' + this.userSession.customerNumber
+      };
+      this.client.createDocument(doc, { extension: 'jpg', data: data });
+    });
   }
 }

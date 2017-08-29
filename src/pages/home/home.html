@@ -12,10 +12,12 @@
 
   <p>You can get to other screens using the menu to the left</p>
 
-  <img *ngIf="image" [src]="image" height="150px" />
-
   <p>Your current balance is £1200</p>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <img *ngIf="image" [src]="image" height="150px" />
+  <p style="font-style: italic" *ngIf="!image">
+    You don't have a photo - why not add one?
+    <button style="display: inline" ion-button secondary (click)="goToCamera()">Take photo</button>
+  </p>
 
 </ion-content>

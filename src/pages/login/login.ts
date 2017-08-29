@@ -8,7 +8,7 @@ import {UserSession} from "../../app/usersession";
   selector: 'login-page',
   templateUrl: 'login.html'
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   constructor(private client: Client, private navCtrl: NavController, private userSession: UserSession) {
   }
 
@@ -21,5 +21,11 @@ export class LoginPage {
       this.userSession.customerNumber = this.username;
       this.navCtrl.setRoot(HomePage);
     });
+  }
+
+  // clear state when we visit the login page (which we do after a logout)
+  ngOnInit(): void {
+    this.userSession.customerNumber = null;
+    this.userSession.imageData = null;
   }
 }

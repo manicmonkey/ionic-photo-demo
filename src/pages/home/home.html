@@ -14,8 +14,8 @@
 
   <p>Your current balance is £1200</p>
 
-  <img *ngIf="image" [src]="image" height="450px" />
-  <p style="font-style: italic" *ngIf="!image">
+  <img *ngIf="userSession.imageData" [src]="userSession.imageData" height="450px" />
+  <p style="font-style: italic" *ngIf="!userSession.imageData">
     You don't have a photo - why not add one?
     <button style="display: inline" ion-button secondary (click)="goToCamera()">Take photo</button>
   </p>

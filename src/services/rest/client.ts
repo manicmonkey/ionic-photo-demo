@@ -46,7 +46,7 @@ export class Client {
   }
 
   private errorHandler = (err) => {
-    console.error('Error happened!', err)
+    console.error('Error happened! ' + err, err)
   };
 
   private options = { withCredentials: true };
@@ -81,7 +81,7 @@ export class Client {
       form.set('extension', file.extension);
       form.set('file', file.data);
     }
-    this.httpClient.put(this.userSession.baseUrl + '/documents/by-id/' + document.properties.id, form, this.options).subscribe(() => {}, this.errorHandler);
+    this.httpClient.put(this.userSession.baseUrl + '/documents/by-id/' + document.properties.id, form, this.options).subscribe(data => { console.log('Completed request: ' + data) }, this.errorHandler);
   }
 
   loadKeyDefs() {

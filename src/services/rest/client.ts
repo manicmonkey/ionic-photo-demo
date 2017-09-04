@@ -95,6 +95,6 @@ export class Client {
   }
 
   loadDocumentByCuk(customerUniqueKey: string) {
-    return this.httpClient.get<Document>(this.userSession.baseUrl + '/documents/by-cuk/' + customerUniqueKey, this.options);
+    return this.httpClient.get<Document>(this.userSession.baseUrl + '/documents/by-cuk/' + customerUniqueKey + '?current=true', this.options);
   }
 }

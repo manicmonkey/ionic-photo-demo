@@ -14,10 +14,6 @@ export class KeyDefsPage {
 
   keyDefs: KeyDef[];
 
-  login() {
-    this.client.login('admin', 'password');
-  }
-
   loadKeyDefs() {
     this.client.loadKeyDefs().subscribe(data => {
       // Read the result field from the JSON response.
@@ -25,10 +21,5 @@ export class KeyDefsPage {
       // data.forEach(d => d.name)
       this.keyDefs = data;
     });
-  }
-
-  logout() {
-    this.client.logout();
-    this.keyDefs = null;
   }
 }

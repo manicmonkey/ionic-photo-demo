@@ -24,6 +24,7 @@ export class HomePage implements OnInit {
     this.client.loadDocumentByCuk('photo-' + this.userSession.customerNumber).subscribe(data => {
       const id = data[0]['properties']['id'];
       const rev = data[0]['properties']['revision'];
+      console.log('Downloading file for document#' + id + ' rev#' + rev);
       this.image = this.userSession.baseUrl + '/documents/by-id/' + id + '/' + rev + '/file';
     }, err => {
       console.log('Could not load customer photo');

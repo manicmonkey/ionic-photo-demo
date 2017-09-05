@@ -71,7 +71,7 @@ export class Client {
       form.set('extension', file.extension);
       form.set('file', file.data);
     }
-    this.httpClient.post(this.userSession.baseUrl + '/documents', form, this.options).subscribe(() => {}, this.errorHandler);
+    return this.httpClient.post(this.userSession.baseUrl + '/documents', form, this.options);
   }
 
   updateDocument(document: Document, file?: {extension: string, data: Blob}) {
@@ -81,7 +81,7 @@ export class Client {
       form.set('extension', file.extension);
       form.set('file', file.data);
     }
-    this.httpClient.put(this.userSession.baseUrl + '/documents/by-id/' + document.properties.id, form, this.options).subscribe(data => { console.log('Completed request: ' + data) }, this.errorHandler);
+    return this.httpClient.put(this.userSession.baseUrl + '/documents/by-id/' + document.properties.id, form, this.options);
   }
 
   loadKeyDefs() {

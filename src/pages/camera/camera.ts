@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {BlobBuilder, Client, Document} from "../../services/rest/client";
 import {UserSession} from "../../app/usersession";
+import { ToastController } from "ionic-angular";
 
 @Component({
   selector: 'page-camera',
@@ -9,7 +10,7 @@ import {UserSession} from "../../app/usersession";
 })
 export class CameraPage {
 
-  constructor(private camera: Camera, private client: Client, private userSession: UserSession) {
+  constructor(private camera: Camera, private client: Client, private userSession: UserSession, private toastCtrl: ToastController) {
   }
 
   options: CameraOptions = {
@@ -33,6 +34,22 @@ export class CameraPage {
     });
   }
 
+  private successHandler(data) {
+    console.log('Request completed successfully', data);
+    this.toastCtrl.create({
+      message: 'Photo uploaded successfully!',
+      duration: 3000
+    }).present();
+  }
+
+  private errorHandler = (err) => {
+    console.error('Error happened!', err);
+    this.toastCtrl.create({
+      message: 'Error uploading photo!',
+      duration: 3000
+    }).present();
+  };
+
   upload() {
     console.log("Uploading with customer number: " + this.userSession.customerNumber);
 
@@ -40,7 +57,7 @@ export class CameraPage {
       console.log('Found document by cuk', data);
       const doc = data[0];
       const fileData = BlobBuilder.dataURItoBlob(this.userSession.imageData);
-      this.client.updateDocument(doc, { extension: 'jpg', data: fileData });
+      this.client.updateDocument(doc, { extension: 'jpg', data: fileData }).subscribe(this.successHandler, this.errorHandler);
     }, err => {
       console.log('Could find existing photo (really should check for 404)', err);
       const data = BlobBuilder.dataURItoBlob(this.userSession.imageData);
@@ -51,7 +68,7 @@ export class CameraPage {
         },
         customerUniqueKey: 'photo-' + this.userSession.customerNumber
       };
-      this.client.createDocument(doc, { extension: 'jpg', data: data });
+      this.client.createDocument(doc, { extension: 'jpg', data: data }).subscribe(this.successHandler, this.errorHandler);
     });
   }
 }

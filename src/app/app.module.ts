@@ -27,6 +27,7 @@ import {
 } from "./fork/xsrf";
 import { UserSession } from "./usersession";
 import { SettingsPage } from "../pages/settings/settings";
+import { StatementPage } from "../pages/statements/statements";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { SettingsPage } from "../pages/settings/settings";
     CameraPage,
     HomePage,
     KeyDefsPage,
+    StatementPage,
     ListPage,
     LoginPage,
     LogoutPage,
@@ -50,6 +52,7 @@ import { SettingsPage } from "../pages/settings/settings";
     CameraPage,
     HomePage,
     KeyDefsPage,
+    StatementPage,
     ListPage,
     LoginPage,
     LogoutPage,

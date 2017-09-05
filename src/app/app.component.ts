@@ -9,6 +9,7 @@ import { KeyDefsPage } from '../pages/keydefs/keydefs'
 import { LoginPage } from "../pages/login/login";
 import { LogoutPage } from "../pages/logout/logout";
 import { SettingsPage } from "../pages/settings/settings";
+import { StatementPage } from "../pages/statements/statements";
 
 @Component({
   templateUrl: 'app.html'
@@ -27,6 +28,7 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: HomePage },
       { title: 'Key Defs', component: KeyDefsPage },
+      { title: 'Statements', component: StatementPage },
       { title: 'Camera', component: CameraPage },
       { title: 'Settings', component: SettingsPage },
       { title: 'Logout', component: LogoutPage },

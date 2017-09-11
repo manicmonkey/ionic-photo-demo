@@ -1,15 +1,20 @@
-import {Client} from "../../services/rest/client";
+import { Client } from "../../services/rest/client";
 import { AlertController, NavController } from "ionic-angular";
-import {HomePage} from "../home/home";
-import {Component, OnInit} from "@angular/core";
-import {UserSession} from "../../app/usersession";
+import { HomePage } from "../home/home";
+import { Component, OnInit } from "@angular/core";
+import { UserSession } from "../../app/usersession";
+import { FingerprintService } from "../../fingerprint/login/fingerprint-service";
 
 @Component({
   selector: 'login-page',
   templateUrl: 'login.html'
 })
 export class LoginPage implements OnInit {
-  constructor(private client: Client, private navCtrl: NavController, private userSession: UserSession, private alertCtrl: AlertController) {
+  constructor(private client: Client,
+              private navCtrl: NavController,
+              private userSession: UserSession,
+              private alertCtrl: AlertController,
+              private fingerprintService: FingerprintService) {
   }
 
   private username: string;
@@ -18,10 +23,18 @@ export class LoginPage implements OnInit {
   login() {
     console.log('Theoretically logging in as ' + this.username);
     this.client.login(this.username, this.password).subscribe(data => {
-      this.userSession.customerNumber = this.username;
-      this.navCtrl.setRoot(HomePage);
+      console.log('Managed to log in');
+      this.fingerprintService.storeCredentials(this.username, this.password).then(result => {
+        console.log('Stored fingerprint');
+        this.userSession.customerNumber = this.username;
+        this.navCtrl.setRoot(HomePage);
+      }).catch(error => {
+        console.log('User decided not to capture fingerprint')
+        this.userSession.customerNumber = this.username;
+        this.navCtrl.setRoot(HomePage);
+      });
     }, err => {
-      console.log('Login failed with error', err);
+      console.error('Login failed with error', err);
       let failureReason = 'Login failed for unknown reasons, please try again';
       if (err.status == 403)
         failureReason = 'Login failed due to invalid credentials, please try again';
@@ -33,12 +46,27 @@ export class LoginPage implements OnInit {
     });
   }
 
+  trigger() {
+    this.ngOnInit();
+  }
+
+  clear() {
+    this.fingerprintService.clear()
+  }
+
   // clear state when we visit the login page (which we do after a logout)
   ngOnInit(): void {
-    this.client.getSession().subscribe(data => {
-      console.log('Got session - must be logged in', data);
-      this.userSession.customerNumber = data[0]['username'];
-      this.navCtrl.setRoot(HomePage);
+    this.fingerprintService.hasFingerprint().then(hasFingerprint => {
+      if (hasFingerprint) {
+        this.fingerprintService.login().then(storedCreds => {
+          this.client.login(storedCreds.username, storedCreds.password).subscribe(result => {
+            this.userSession.customerNumber = storedCreds.username;
+            this.navCtrl.setRoot(HomePage);
+          });
+        }).catch(error => {
+          console.log('Could not login due to error', error);
+        });
+      }
     });
   }
 }

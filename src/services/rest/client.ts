@@ -45,10 +45,6 @@ export class Client {
   constructor(public httpClient: HttpClient, private userSession: UserSession) {
   }
 
-  private errorHandler = (err) => {
-    console.error('Error happened! ' + err, err)
-  };
-
   private options = { withCredentials: true };
 
   login(username: string, password: string) {

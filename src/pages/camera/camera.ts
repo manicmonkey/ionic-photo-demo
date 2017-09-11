@@ -36,19 +36,24 @@ export class CameraPage {
 
   private successHandler(data) {
     console.log('Request completed successfully', data);
-    this.toastCtrl.create({
-      message: 'Photo uploaded successfully!',
-      duration: 3000
-    }).present();
+    this.renderToast('Photo uploaded successfully!');
   }
 
   private errorHandler = (err) => {
     console.error('Error happened!', err);
+    this.renderToast('Error uploading photo!');
+  };
+
+  private renderToast(message: string) {
+    if (!this.toastCtrl) {
+      console.log('Toast not available');
+      return;
+    }
     this.toastCtrl.create({
-      message: 'Error uploading photo!',
+      message: message,
       duration: 3000
     }).present();
-  };
+  }
 
   upload() {
     console.log("Uploading with customer number: " + this.userSession.customerNumber);

@@ -28,6 +28,9 @@ import {
 import { UserSession } from "./usersession";
 import { SettingsPage } from "../pages/settings/settings";
 import { StatementPage } from "../pages/statements/statements";
+import { AndroidFingerprintAuth } from "@ionic-native/android-fingerprint-auth";
+import { FingerprintService } from "../fingerprint/login/fingerprint-service";
+import { IonicStorageModule } from "@ionic/storage";
 
 @NgModule({
   declarations: [
@@ -44,7 +47,8 @@ import { StatementPage } from "../pages/statements/statements";
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -59,8 +63,10 @@ import { StatementPage } from "../pages/statements/statements";
     SettingsPage,
   ],
   providers: [
+    AndroidFingerprintAuth,
     Camera,
     Client,
+    FingerprintService,
     UserSession,
     StatusBar,
     SplashScreen,
